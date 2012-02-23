@@ -1,0 +1,38 @@
+#+TITLE: Monitoring slowly evolving tumors -- Summary
+#+AUTHOR: Mariana Bustamante
+#+YEAR: 2008
+
+The paper describes an approach that semi-automatically performs change detection using longitudinal medical images.
+
+
+* Introduction
+- Slow growth is often obscured by changes in the head position or intensity profile between two scans.
+- Most automatic methods focus on visible growth.
+- Approach:
+  1. Semi-automatically segment the tumor in the initial patient scan.
+  2. Align the second scan to the first using a hierarchical rigid registration approach.
+  3. Measure growth or shrinkage from these images
+     * Through analyzing differences in intensity distribution
+     * Analyzing the deformation field between two scans
+
+* Semi-automatic change detection
+** Semi-automatically identify the tumor in the first scan only. Based on a user defined bounding box (BB) around the tumor.
+   - Assumes that meningioma generally show up on MR images as homogeneous, bright objects. [Not in our case]
+   - Note that the resulting map will also include some other things with similar intensity patterns. However, they should not impact the analysis since they are static.
+
+** Automatically align the pathology of the second scan to the first by rigidly registering the scans.
+   - The registration is done with alignment by maximization of mutual information. [References a paper]
+   - Assumes that the previous BB is large enough so that its coordinates also define a BB around the tumor in the second scan.
+   a. Accommodate partial voluming in images by increasing the resolution of both BBs.
+   b. Rigidly align the contents of the BBs with each other. This results in a image where, in theory, the tumor is well aligned.
+
+** Measure tumor evolution with 3 possible metrics for detecting change:
+1. Statistical Analysis of Change
+   - Differentiates changes in the intensity patterns that are due to evolving pathology rather than image artifacts.
+   - Each voxel in the image is labeled as: Non-modified (N), growing (G) or shrinking (S).
+   - The change in tumor size is the difference in the number of voxels labeled as G versus S.
+
+2. Deformable model based analysis
+
+
+  
