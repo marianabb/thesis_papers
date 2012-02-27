@@ -1,0 +1,80 @@
+#+TITLE: Automatic detection and segmentation of evolving processes in #D medical images: Application to multiple sclerosis -- Summary
+#+AUTHOR: Mariana Bustamante
+#+YEAR: 2000
+
+* Abstract
+- The objective of this work was to automatically detect regions with apparent local volume variation with a vector field operator applied 
+  to the local displacement field obtained after a non-rigid registration between two successive temporal images.
+- Quantitative measurements, such as the volume variation of lesions or segmentation of evolving lesions, are important.
+- At this stage, we have only applied the approach to a few experimental cases. A clinical validation remains to be done.
+
+* Introduction
+** Detection and segmentation of evolving lesions
++ Qualitative information: Positions of lesions, segmentation of lesions.
++ Quantitative information: Total volume of lesions, volume variation of lesions, segmentation of lesions.
+
++ Images at different times are not directly comparable (movement of the patient, different machine, etc). We have to apply a transformation
+  to compensate for the difference in position (translation) and orientation (rotation).
++ Even with pre-processing, some perturbations can still disturd registration algorithms and in this case there is an inaccuracy in the
+  alignment.
++ Automatic methods to study lesions in time series:
+  - Thresholding does not always make it possible to distinguish the lesions from the white matter.
+  - Substract two images to find intensity changes. The substraction is dependent on the accuracy of the rigid registration.
+    It is not trivial to distinguish global rigid changes from local rigid and non-rigid changes if the registration had issues.
+
+** A new method based on the displacement field
+Our idea is to avoid a voxel-by-voxel comparison using the 'apparent' motion between two images. We want to find a vector at each voxel
+that expresses its visual motion from one image to another by using a kind of optic flow algorithm. 
+Stages:
+1. Images are aligned by rigid registration
+2. Compute the displacement field with non-rigis registration.
+3. Focus on the detection of regions of interest thanks to vector field operators.
+4. Use regions of interest to segment evolving lesions.
+
+* Computation of the displacement field
+** Rigid registration
+- We preferred a geometrical approach over an intensity-based method to be more robust.
+- Extract feature points along the crest lines of the isosurface corresponding to the zero-crossing of the Laplacian of the image.
+- Algorithm in [Pennec and Thirion, 1997]
+
+** Non-rigid registration
+- Compute a 3D displacement field with a non-rigid algorithm based on local difussion [Thirion, 1998; Cachier et al. 1999]
+- It is an optical flow method the diffuses image 2 into image 1. Image 2 is iterativaly deformed.
+- It works, even if the intensities are not equivalent.
+- We use four multi-resolution levels with four iterations at the highest resolution level and the sigma for the Gaussian smoothing
+  of the vector field is 1.0.
+- At the end, each 3D point on image 1 has a vector $u$ that gives its apparent displacementd. Field $u$ gives an idea of the temporal
+  evolution between the images.
+- Objectives:
+  + Obtaining a scalar image enhancing time evolutions.
+  + Introduce operators that yield scalar values with a physical meaning for better interpretation.
+
+* The Jacobian operator
+** Mathematical expression and physical meaning
+- Inspired from [Davatzikos et al. 1996]
+- The Jacobian of the deformation function gives the local variation of an elementary volume. It is a first order approximation.
+- Jacobian > 1 -> local expansion. Jacobian < 1 -> local shrinking.
+
+** Robustness of the Jacobian with respect to misalignment
+The Jacobian is invariant with respect to imperfect rigid registration. Of course, it requires that the non-rigid registration algorithm
+still computes a correct displacement field. This is actually the case as long as the original rigid alignment remains close to the ideal one.
+
+It is therefore much less constrained than when employing the subtraction method where a precision of the initial rigid alignment typically
+better than one voxel is required.
+
+** Computation and application of the Jacobian
+- We need to compute the first nine derivatives of the displacement field $u$.
+- We use recursive filtering which gives an image for each derivative. We compute the Jacobian on sub-images and then fuse the
+sub-results which include an overlapping border to avoid side effects.
+- It is possible to compute a good approximation of the Jacobian at each point by calculating the determinant of the linear part of the
+approximative local affine transformation.
+
+** Other operators
++ [Thirion and Calmon 1999]: Another vector field operator based on the divergence and the norm of the displacement field $u$. We have
+no physical interpretation of the value, so it is difficult to automatically threshold the image to extract regions of interest.
++ [Prima et al. 1998]
++ [Rey et al. 1999]
+
+* Results 
+
+
