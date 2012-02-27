@@ -33,6 +33,26 @@ The paper describes an approach that semi-automatically performs change detectio
    - The change in tumor size is the difference in the number of voxels labeled as G versus S.
 
 2. Deformable model based analysis
+   - Measures tumor evolution by analyzing the deformation field D that maps the first BB to the second one. We must omit information in D unrelated
+     to he tumor.
+   - We determine D by the algorithm explained in [referenc 7] based on the well known demons method, which computes D by finding the 
+     diffeomorphic transformation the best aligns the intensities. It also confines D to be smooth so that artifacts due to noise are reduced.
+   - After computing D we use Jacobian determinants or deformation fields to compute the volume V of the change.
+
+* Testing our metrics
+1. Synthetic example
+   - The growth is simulated via a simple mechanical model, which performs homogeneous expansion by deforming the surrounding tissue around the 
+     tumor.
+   - All three metrics detect small growth.
+   - The results suggests that our tool successfully detects growth even when visual inspection is very difficult.
+2. Real Images
+   - The data set consists mostly of cases with less than 100mm^3 growth, which is generally very difficult to detect.
+   - The differences between the automatic and manual measurements are within the variations expected from manual measurements.
+
+* Conclusion
+- The correlation to expert findings show the potential of the tool.
+- The tool seems to be less impacted by intra and inter-rater variability than the human expert.
+- The evolution of the tumor is indeed very small, which our approach successfully captures.
 
 
   
