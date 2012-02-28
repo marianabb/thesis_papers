@@ -1,4 +1,4 @@
-#+TITLE: Automatic detection and segmentation of evolving processes in #D medical images: Application to multiple sclerosis -- Summary
+#+TITLE: Automatic detection and segmentation of evolving processes in 3D medical images: Application to multiple sclerosis -- Summary
 #+AUTHOR: Mariana Bustamante
 #+YEAR: 2000
 
@@ -76,5 +76,33 @@ no physical interpretation of the value, so it is difficult to automatically thr
 + [Rey et al. 1999]
 
 * Results 
+** Thresholding and segmentation
+- We can extract areas that correspond to significant temporal evolution since it is possible to find a uniform threshold over the
+whole Jacobian image.
+- They developed a simpler method: [Cacher and Rey, 2000]
 
+** Study of a synthetic example
+- Skipped the rigid registration step for this case.
+- Accuracy of the delimitation is qualitatively correct, but we observed a difference of between 5 ans 20% between the correct diameter
+of the lesions and the measured diameter.
+
+** Refinement of the segmentation
+- Used a method based on "deformable models" [Montagnat and Delingette, 1998]. It combines both geometric and image information to perform 
+the segmentation.
+- Gives a better result and makes it possible to perform quantitative measurements.
+
+** Validation
+- This is not a clinical validation, which is much more complicated and will require a long period of time (2 years).
+- Preliminary results: [Rey et al, 2000; Lebrun-Frenay et al, 2000]
+
+** Robustness with respect to imperfect rigid registration
+Simply subtracting the images produces a very noisy result, while the results provided by this method remain similar to the results without
+the imperfect rigid registration.
+
+* Conclusion
+- We believe that our approach will be useful to detect evolving regions corresponding to local apparent expansion or shrinking.
+- At this stage, we have only applied the approach  to a few experimental cases to demonstrate its potential.
+- The method has the advantage of not being very dependent on the initial alignment given by a rigid registration stage, but still
+gives poor results for segmentation. Thus we plan to use it in combination with deformable models algorithms.
+- Clinical validation remains to be done, which will require additional work.
 
